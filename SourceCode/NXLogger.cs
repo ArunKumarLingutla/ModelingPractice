@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using NXOpen;
-using NXOpenSetUPCSharp;
+using ModelingPractice;
 
-namespace NXOpenSetUPCSharp
+namespace ModelingPractice
 {
     public enum LogLevel
     {

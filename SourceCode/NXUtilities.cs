@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NXOpenSetUPCSharp
+namespace ModelingPractice
 {
     public class NXUtilities
     {
@@ -26,9 +26,6 @@ namespace NXOpenSetUPCSharp
             NXOpen.Session theSession = NXOpen.Session.GetSession();
             NXOpen.Part workPart = theSession.Parts.Work;
             NXOpen.Part displayPart = theSession.Parts.Display;
-            // ----------------------------------------------
-            //   Menu: Insert->Sketch...
-            // ----------------------------------------------
 
             NXOpen.Sketch nullNXOpen_Sketch = null;
             NXOpen.SketchInPlaceBuilder sketchInPlaceBuilder1;
@@ -36,61 +33,19 @@ namespace NXOpenSetUPCSharp
 
             NXOpen.Point3d origin1 = new NXOpen.Point3d(origin[0], origin[1], origin[2]);
             NXOpen.Vector3d normal1 = new NXOpen.Vector3d(normal[0], normal[1], normal[2]);
-            NXOpen.Plane plane1;
-            plane1 = workPart.Planes.CreatePlane(origin1, normal1, NXOpen.SmartObject.UpdateOption.WithinModeling);
+            NXOpen.Plane plane1 = workPart.Planes.CreatePlane(origin1, normal1, NXOpen.SmartObject.UpdateOption.WithinModeling);
 
             sketchInPlaceBuilder1.PlaneReference = plane1;
-
-            //NXOpen.Unit unit1 = (NXOpen.Unit)workPart.UnitCollection.FindObject("MilliMeter");
-            //NXOpen.Expression expression1;
-            //expression1 = workPart.Expressions.CreateSystemExpressionWithUnits("0", unit1);
-
-            //NXOpen.Expression expression2;
-            //expression2 = workPart.Expressions.CreateSystemExpressionWithUnits("0", unit1);
-
-            //NXOpen.SketchAlongPathBuilder sketchAlongPathBuilder1;
-            //sketchAlongPathBuilder1 = workPart.Sketches.CreateSketchAlongPathBuilder(nullNXOpen_Sketch);
-
-            //sketchAlongPathBuilder1.PlaneLocation.Expression.RightHandSide = "0";
-
-            //theSession.Preferences.Sketch.CreateInferredConstraints = true;
-
-            //theSession.Preferences.Sketch.ContinuousAutoDimensioning = true;
-
-            //theSession.Preferences.Sketch.DimensionLabel = NXOpen.Preferences.SketchPreferences.DimensionLabelType.Expression;
-
-            //theSession.Preferences.Sketch.TextSizeFixed = true;
-
-            //theSession.Preferences.Sketch.FixedTextSize = 3.0;
-
-            //theSession.Preferences.Sketch.DisplayParenthesesOnReferenceDimensions = true;
-
-            //theSession.Preferences.Sketch.DisplayReferenceGeometry = false;
-
-            //theSession.Preferences.Sketch.ConstraintSymbolSize = 3.0;
-
-            //theSession.Preferences.Sketch.DisplayObjectColor = false;
-
-            //theSession.Preferences.Sketch.DisplayObjectName = true;
 
             NXOpen.NXObject nXObject1;
             nXObject1 = sketchInPlaceBuilder1.Commit();
 
             NXOpen.Sketch sketch1 = (NXOpen.Sketch)nXObject1;
-            NXOpen.Features.Feature feature1;
-            feature1 = sketch1.Feature;
-
-            //NXOpen.Session.UndoMarkId markId4;
-            //markId4 = theSession.SetUndoMark(NXOpen.Session.MarkVisibility.Invisible, "update");
-
-            //int nErrs1;
-            //nErrs1 = theSession.UpdateManager.DoUpdate(markId4);
+            NXOpen.Features.Feature feature1=sketch1.Feature;
 
             sketch1.Activate(NXOpen.Sketch.ViewReorient.True);
 
             sketchInPlaceBuilder1.Destroy();
-
-            //sketchAlongPathBuilder1.Destroy();
 
             plane1.DestroyPlane();
 
@@ -105,8 +60,7 @@ namespace NXOpenSetUPCSharp
             NXOpen.Session theSession = NXOpen.Session.GetSession();
             NXOpen.Part workPart = theSession.Parts.Work;
             NXOpen.Part displayPart = theSession.Parts.Display;
-            NXOpen.Sketch sketch2;
-            sketch2 = theSession.ActiveSketch;
+            NXOpen.Sketch activeSketch= theSession.ActiveSketch;
 
             theSession.ActiveSketch.Deactivate(NXOpen.Sketch.ViewReorient.True, NXOpen.Sketch.UpdateLevel.Model);
         }
@@ -272,6 +226,51 @@ namespace NXOpenSetUPCSharp
                 pt_on_obj2
             );
             return min_dist;
+        }
+        public static void ChangeColor(NXObject obj, int color)
+        {
+            Session session = Session.GetSession();
+            Part workPart = session.Parts.Work;
+            var clr = workPart.Colors.Find(color);
+            
+            // FEATURE CASE
+            if (obj is Feature feature)
+            {
+                ColorFeatureBuilder builder = workPart.Features.CreateColorFeatureBuilder();
+
+                try
+                {
+                    builder.SelectFeature.Add(new Feature[] { feature });
+
+                    builder.SpecifyColor = ColorFeatureBuilder.OperationType.SpecifyColor;
+
+                    builder.Color = workPart.Colors.Find(color);
+
+                    builder.Commit();
+                }
+                finally
+                {
+                    builder.Destroy();
+                }
+
+                return;
+            }
+
+            // DISPLAYABLE OBJECT CASE
+            if (obj is DisplayableObject dispObj)
+            {
+                using (DisplayModification dm =
+                    session.DisplayManager.NewDisplayModification())
+                {
+                    dm.NewColor = color;
+                    dm.ApplyToAllFaces = true;
+
+                    dm.Apply(new DisplayableObject[]
+                    {
+                dispObj
+                    });
+                }
+            }
         }
         /// <summary>
         /// deletes the specified TaggedObject(s) from the current work part.

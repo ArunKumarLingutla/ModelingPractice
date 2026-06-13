@@ -1,15 +1,15 @@
 ﻿using NXOpen;
 using System;
 
-namespace NXOpenSetUPCSharp
+namespace ModelingPractice
 {
-    public class NXOpenSetUPCsharp
+    public class ModelingPractice
     {
         //class members
         private static NXOpen.Session theSession = null;
         private static NXOpen.UF.UFSession theUFSession = null;
         private static NXOpen.UI theUI = null;
-
+        private static InputParameters InputParametersObj=null;
         public static void Main(string[] args)
         {
             try
@@ -21,8 +21,42 @@ namespace NXOpenSetUPCSharp
                 NXOpen.Part displayPart = theSession.Parts.Display;
                 ProjectSetUp.InitializeTool();
 
-                //Write your code here
-
+                if (!theSession.IsBatch && InputParametersObj == null)
+                {
+                    InputParametersObj=new InputParameters();
+                    UI_ObjectSelectionToDisplayDetails theUI_ObjectSelectionToDisplayDetails = null;
+                    try
+                    {
+                        theUI_ObjectSelectionToDisplayDetails = new UI_ObjectSelectionToDisplayDetails(InputParametersObj);
+                        // The following method shows the dialog immediately
+                        theUI_ObjectSelectionToDisplayDetails.Show();
+                    }
+                    catch (Exception ex)
+                    {
+                        //---- Enter your exception handling code here -----
+                        theUI.NXMessageBox.Show("Block Styler", NXMessageBox.DialogType.Error, ex.ToString());
+                    }
+                    finally
+                    {
+                        if (theUI_ObjectSelectionToDisplayDetails != null)
+                            theUI_ObjectSelectionToDisplayDetails.Dispose();
+                        theUI_ObjectSelectionToDisplayDetails = null;
+                    }
+                }
+                var selectedObj = InputParametersObj.SelectedObjs;
+                switch (selectedObj)
+                {
+                    case NXOpen.Face face:
+                        break;
+                    case NXOpen.Edge edge:
+                        break;
+                    case NXOpen.Body body:
+                        break;
+                    default:
+                        Console.WriteLine($"Unhandled type: {selectedObj.GetType().Name}");
+                        break;
+                }
+                BodiesPractice.GetBodyDetails();
             }
             catch (Exception ex)
             {

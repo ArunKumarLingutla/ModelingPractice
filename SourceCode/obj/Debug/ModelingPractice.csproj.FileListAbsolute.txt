@@ -1,0 +1,17 @@
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\ModelingPractice.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\ModelingPractice.pdb
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.Guide.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.UF.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.Utilities.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpenUI.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.xml
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.Guide.xml
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.UF.xml
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpen.Utilities.xml
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\bin\Debug\NXOpenUI.xml
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\obj\Debug\ModelingPractice.csproj.AssemblyReference.cache
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\obj\Debug\ModelingPractice.csproj.CoreCompileInputs.cache
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\obj\Debug\Modeling.5BFA8920.Up2Date
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\obj\Debug\ModelingPractice.dll
+C:\Users\arunk\source\repos\ModelingPractice\SourceCode\obj\Debug\ModelingPractice.pdb

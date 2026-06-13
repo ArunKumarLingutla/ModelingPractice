@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ModelingPractice
 {
-    public class ProjectVariables
+    public class SketchPractice
     {
-        public static string InputDirectory { get; set; }
-        public static string OutputDirectory { get; set; }
+           
     }
 }
