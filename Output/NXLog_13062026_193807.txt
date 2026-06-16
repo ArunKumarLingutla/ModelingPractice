@@ -1,7 +1,0 @@
-[2026-06-13 19:38:07] [Info] ===== NX Logging Started =====
-[2026-06-13 19:38:07] [Debug] User: arunk, NX Version: v12
-[2026-06-13 19:38:07] [Info] Tool initialized with input directory: C:\Users\arunk\source\repos\ModelingPractice\Input
-[2026-06-13 19:38:07] [Info] Output directory set to: C:\Users\arunk\source\repos\ModelingPractice\Output
-[2026-06-13 19:39:00] [Error] Exception: Object reference not set to an instance of an object.
-[2026-06-13 19:39:00] [Debug] Stack Trace:    at ModelingPractice.ModelingPractice.Main(String[] args) in C:\Users\arunk\source\repos\ModelingPractice\SourceCode\ModelingPractice.cs:line 56
-[2026-06-13 19:39:00] [Info] ===== NX Logging Ended =====

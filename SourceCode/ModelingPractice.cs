@@ -43,20 +43,25 @@ namespace ModelingPractice
                         theUI_ObjectSelectionToDisplayDetails = null;
                     }
                 }
-                var selectedObj = InputParametersObj.SelectedObjs;
-                switch (selectedObj)
-                {
-                    case NXOpen.Face face:
-                        break;
-                    case NXOpen.Edge edge:
-                        break;
-                    case NXOpen.Body body:
-                        break;
-                    default:
-                        Console.WriteLine($"Unhandled type: {selectedObj.GetType().Name}");
-                        break;
-                }
-                BodiesPractice.GetBodyDetails();
+                SketchPractice.ActivateSketch(new double[] { 0, 0, 1}, new double[] { 0, 0, 0 });
+                var sketchPlane = (DatumPlane) theSession.ActiveSketch.AttachPlane;
+                UI.GetUI().NXMessageBox.Show("Sketch pale", NXMessageBox.DialogType.Information, $"Sketch Plane ({sketchPlane.Normal.X}, {sketchPlane.Normal.Y}, {sketchPlane.Normal.Z})");
+                SketchPractice.CreateSSketchIntersectionCurve((Face)InputParametersObj.SelectedObjs);
+                SketchPractice.DeActiveSketch();
+                //var selectedObj = InputParametersObj.SelectedObjs;
+                //switch (selectedObj)
+                //{
+                //    case NXOpen.Face face:
+                //        break;
+                //    case NXOpen.Edge edge:
+                //        break;
+                //    case NXOpen.Body body:
+                //        break;
+                //    default:
+                //        Console.WriteLine($"Unhandled type: {selectedObj.GetType().Name}");
+                //        break;
+                //}
+                //BodiesPractice.GetBodyDetails();
             }
             catch (Exception ex)
             {

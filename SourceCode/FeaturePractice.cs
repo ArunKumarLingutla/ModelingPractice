@@ -21,6 +21,7 @@ namespace ModelingPractice
 
             foreach (NXOpen.Features.Feature feature in workPart.Features)
             {
+                
                 //Gives 'Fixed Datum Axis(1)' these kind of name most near to the type of that feature
                 string name = feature.GetFeatureName();
                 //Gives user defined name inside double quotes "CarBody" if assigned or will give empty name
@@ -37,7 +38,7 @@ namespace ModelingPractice
                 var parents = feature.GetParents();
                 bool isSupressed = feature.Suppressed;
                 var allChildren= feature.GetAllChildren();
-                //NXOpen.Body[] bodies = feature.GetBodies();
+                //NXOpen.Body[] bodies = feature.GetBodies(); 
                 lw.WriteLine("------------------------------------------------------------------------------");
                 lw.WriteLine($"Feature Name [feature.GetFeatureName()]      :{name}");
                 lw.WriteLine($"Feature Name [feature.Name]                  :{userDefinedName}");
