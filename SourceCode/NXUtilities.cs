@@ -3,13 +3,8 @@ using NXOpen.Assemblies;
 using NXOpen.CAE;
 using NXOpen.Features;
 using NXOpen.UF;
-using NXOpen.Utilities;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static NXOpen.CAE.Post;
 
 namespace ModelingPractice
 {
@@ -41,7 +36,7 @@ namespace ModelingPractice
             nXObject1 = sketchInPlaceBuilder1.Commit();
 
             NXOpen.Sketch sketch1 = (NXOpen.Sketch)nXObject1;
-            NXOpen.Features.Feature feature1=sketch1.Feature;
+            NXOpen.Features.Feature feature1 = sketch1.Feature;
 
             sketch1.Activate(NXOpen.Sketch.ViewReorient.True);
 
@@ -60,7 +55,7 @@ namespace ModelingPractice
             NXOpen.Session theSession = NXOpen.Session.GetSession();
             NXOpen.Part workPart = theSession.Parts.Work;
             NXOpen.Part displayPart = theSession.Parts.Display;
-            NXOpen.Sketch activeSketch= theSession.ActiveSketch;
+            NXOpen.Sketch activeSketch = theSession.ActiveSketch;
 
             theSession.ActiveSketch.Deactivate(NXOpen.Sketch.ViewReorient.True, NXOpen.Sketch.UpdateLevel.Model);
         }
@@ -111,21 +106,23 @@ namespace ModelingPractice
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="z"></param>
+        /// <param name="name"></param>
         /// <returns></returns>
-        public static Point CreatePointAsFeature(double x, double y, double z)
+        public static Point CreatePointAsFeature(double x, double y, double z, string name)
         {
             NXOpen.Features.Feature nullNXOpen_Features_Feature = null;
             NXOpen.Features.PointFeatureBuilder pointFeatureBuilder1 = NXOpen.Session.GetSession().Parts.Work.BaseFeatures.CreatePointFeatureBuilder(nullNXOpen_Features_Feature);
 
 
             // Create Point3d (temporary positions)
-            Point3d p1 = new Point3d(x,y,z);
+            Point3d p1 = new Point3d(x, y, z);
             //Add this to builder
             pointFeatureBuilder1.Point = NXOpen.Session.GetSession().Parts.Work.Points.CreatePoint(p1);
             NXOpen.NXObject nXObject1 = pointFeatureBuilder1.Commit(); //should be committed to view the point in part navigator and graphics window
-            Point point=pointFeatureBuilder1.Point;
-            pointFeatureBuilder1.Destroy();
+            Point point = pointFeatureBuilder1.Point;
 
+            pointFeatureBuilder1.Destroy();
+            SetFeatureName(point, name);
             return point;
         }
 
@@ -198,9 +195,9 @@ namespace ModelingPractice
 
             return line;
         }
-        public static double MeasureDistance(TaggedObject obj1,TaggedObject obj2)
+        public static double MeasureDistance(TaggedObject obj1, TaggedObject obj2)
         {
-            UFSession ufs=UFSession.GetUFSession();
+            UFSession ufs = UFSession.GetUFSession();
             double[] guess1 = new double[3] { 0.0, 0.0, 0.0 };
             double[] guess2 = new double[3] { 0.0, 0.0, 0.0 };
 
@@ -227,12 +224,22 @@ namespace ModelingPractice
             );
             return min_dist;
         }
+        /// <summary>
+        /// Changes the color of the specified NXObject to the given color index. The method handles both Feature and DisplayableObject types, applying the appropriate color change mechanism for each. For Feature objects, it uses the ColorFeatureBuilder to specify the new color, while for DisplayableObject instances, it utilizes a DisplayModification to apply the color change directly. Ensure that the color index provided corresponds to a valid color in the current work part's color collection.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="color">Input color index.
+        /// Green   , Color ID: 36
+        /// Blue    , Color ID: 211
+        /// Red , Color ID: 186
+        /// Yellow  , Color ID: 6
+        /// </param>
         public static void ChangeColor(NXObject obj, int color)
         {
             Session session = Session.GetSession();
             Part workPart = session.Parts.Work;
             var clr = workPart.Colors.Find(color);
-            
+
             // FEATURE CASE
             if (obj is Feature feature)
             {
@@ -259,18 +266,39 @@ namespace ModelingPractice
             // DISPLAYABLE OBJECT CASE
             if (obj is DisplayableObject dispObj)
             {
-                using (DisplayModification dm =
-                    session.DisplayManager.NewDisplayModification())
+                using (DisplayModification dm = session.DisplayManager.NewDisplayModification())
                 {
                     dm.NewColor = color;
                     dm.ApplyToAllFaces = true;
 
-                    dm.Apply(new DisplayableObject[]
+                    try
                     {
-                dispObj
-                    });
+                        session.ActiveSketch.Preferences.DisplayObjectColor = true; 
+                    }
+                    catch { }
+                    dm.Apply(new DisplayableObject[] {dispObj});
                 }
             }
+        }
+        /// <summary>
+        /// Sets the name of the specified feature in the current work part. 
+        /// </summary>
+        /// <param name="feature"></param>
+        /// <param name="name"></param>
+        public static void SetFeatureName(NXObject feature, string name)
+        {
+            NXOpen.Session theSession = NXOpen.Session.GetSession();
+            NXOpen.Part workPart = theSession.Parts.Work;
+            NXOpen.Part displayPart = theSession.Parts.Display;
+            NXOpen.FeatureGeneralPropertiesBuilder featureGeneralPropertiesBuilder1;
+            featureGeneralPropertiesBuilder1 = workPart.PropertiesManager.CreateFeatureGeneralPropertiesBuilder(new NXObject[] {feature});
+
+            featureGeneralPropertiesBuilder1.FeatureName = name;
+
+            NXOpen.NXObject nXObject1;
+            nXObject1 = featureGeneralPropertiesBuilder1.Commit();
+
+            featureGeneralPropertiesBuilder1.Destroy();
         }
         /// <summary>
         /// deletes the specified TaggedObject(s) from the current work part.

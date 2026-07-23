@@ -43,31 +43,31 @@ namespace ModelingPractice
                         theUI_ObjectSelectionToDisplayDetails = null;
                     }
                 }
-                SketchPractice.ActivateSketch(new double[] { 0, 0, 1}, new double[] { 0, 0, 0 });
-                var sketchPlane = (DatumPlane) theSession.ActiveSketch.AttachPlane;
-                UI.GetUI().NXMessageBox.Show("Sketch pale", NXMessageBox.DialogType.Information, $"Sketch Plane ({sketchPlane.Normal.X}, {sketchPlane.Normal.Y}, {sketchPlane.Normal.Z})");
+                ////---- Enter your code here -----
+                var sketch= SketchPractice.ActivateSketch(new double[] {1,0,0},new double[] {0,0,0},out Sketch sketch1);
                 SketchPractice.CreateSSketchIntersectionCurve((Face)InputParametersObj.SelectedObjs);
+
+                foreach (var c in sketch1.GetAllGeometry()) 
+                {
+                    NXLogger.Instance.Log($"Sketch type of - {c.Name} is:{c.GetType()}");
+                    UI.GetUI().NXMessageBox.Show("Sketch object type", NXMessageBox.DialogType.Information, $"Sketch type of - {c.Name} is:{c.GetType()}");
+                }
+                    
+                
+
                 SketchPractice.DeActiveSketch();
-                //var selectedObj = InputParametersObj.SelectedObjs;
-                //switch (selectedObj)
-                //{
-                //    case NXOpen.Face face:
-                //        break;
-                //    case NXOpen.Edge edge:
-                //        break;
-                //    case NXOpen.Body body:
-                //        break;
-                //    default:
-                //        Console.WriteLine($"Unhandled type: {selectedObj.GetType().Name}");
-                //        break;
-                //}
-                //BodiesPractice.GetBodyDetails();
+
             }
             catch (Exception ex)
             {
                 NXLogger.Instance.LogException(ex);
                 NXLogger.Instance.Dispose();
                 throw;
+            }
+            finally
+            {
+                ProjectSetUp.Refresh();
+                
             }
         }
 

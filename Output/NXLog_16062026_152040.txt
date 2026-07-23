@@ -1,4 +1,0 @@
-[2026-06-16 15:20:40] [Info] ===== NX Logging Started =====
-[2026-06-16 15:20:40] [Debug] User: arunk, NX Version: v12
-[2026-06-16 15:20:40] [Info] Tool initialized with input directory: C:\Users\arunk\source\repos\ModelingPractice\Input
-[2026-06-16 15:20:40] [Info] Output directory set to: C:\Users\arunk\source\repos\ModelingPractice\Output
